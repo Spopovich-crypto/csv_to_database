@@ -92,27 +92,6 @@ def register_header_to_duckdb(header_lf: pl.LazyFrame, db_path: Path, table_name
         con.executemany(f"INSERT INTO {table_name} VALUES (?, ?, ?)", new_rows.values.tolist())
     con.close()
 
-def register_header_to_duckdb(header_lf: pl.LazyFrame, db_path: str = "master.duckdb", table_name: str = "param_master"):
-    # DuckDBに接続
-    con = duckdb.connect(db_path)
-    # DataFrame化
-    header_df = header_lf.collect().to_pandas()
-    # テーブル作成（なければ）
-    con.execute(f"""
-        CREATE TABLE IF NOT EXISTS {table_name} (
-            param_id TEXT,
-            param_name TEXT,
-            unit TEXT
-        )
-    """)
-    # 既存データ取得
-    existing_ids = set(con.execute(f"SELECT param_id FROM {table_name}").fetchall())
-    # 未登録データ抽出
-    new_rows = header_df[~header_df["param_id"].isin([row[0] for row in existing_ids])]
-    # 追記
-    if not new_rows.empty:
-        con.executemany(f"INSERT INTO {table_name} VALUES (?, ?, ?)", new_rows.values.tolist())
-    con.close()
 
 def write_parquet_file(lf: pl.LazyFrame, plant_name: str, machine_name:str):
 
