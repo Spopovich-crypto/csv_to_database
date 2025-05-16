@@ -59,7 +59,8 @@ def read_pi_file(file_path: Path, encoding="utf-8"):
 
     header_lf = pl.LazyFrame(
         header_records,
-        schema=["param_id", "param_name", "unit"]
+        schema=["param_id", "param_name", "unit"],
+        orient="row",
     )
 
     return lf, header_lf
