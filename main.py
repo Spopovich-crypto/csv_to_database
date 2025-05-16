@@ -45,7 +45,7 @@ def read_pi_file(file_path: Path, encoding="utf-8"):
     )
 
     # null行の除去
-    lf = lf.filter(pl.all_horizontal(pl.all().is_not_null()))
+    lf = lf.filter(pl.any_horizontal(pl.all().is_not_null()))
 
     # パーティショニング用列追加
     lf = lf.with_columns([
