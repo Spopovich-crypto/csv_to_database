@@ -27,7 +27,6 @@ def read_pi_file(file_path: Path, encoding="utf-8") -> list[dict]:
     with open(file_path, encoding=encoding) as f:
         header = [next(f) for _ in range(3)]
 
-
     header = [row.strip().split(",") for row in header]
     param_names = header[0]
     param_names[0] = "Datetime"
