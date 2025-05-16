@@ -86,5 +86,5 @@ def register_header_to_duckdb(header_lf: pl.LazyFrame, db_path: str = "master.du
     new_rows = header_df[~header_df["param_id"].isin([row[0] for row in existing_ids])]
     # 追記
     if not new_rows.empty:
-        con.execute(f"INSERT INTO {table_name} VALUES (?, ?, ?)", new_rows.values.tolist())
+        con.executemany(f"INSERT INTO {table_name} VALUES (?, ?, ?)", new_rows.values.tolist())
     con.close()
