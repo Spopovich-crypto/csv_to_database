@@ -69,7 +69,7 @@ def read_pi_file(file_path: Path, encoding="utf-8"):
 
 def register_header_to_duckdb(header_lf: pl.LazyFrame, db_path: Path, table_name: str = "param_master"):
     # フォルダ作成
-    db_path.mkdir(parents=True, exist_ok=True)
+    db_path.parent.mkdir(parents=True, exist_ok=True)
     
     # DuckDBに接続
     con = duckdb.connect(db_path)
@@ -93,7 +93,7 @@ def register_header_to_duckdb(header_lf: pl.LazyFrame, db_path: Path, table_name
     con.close()
 
 
-def write_parquet_file(lf: pl.LazyFrame, plant_name: str, machine_name:str):
+def write_parquet_file(lf: pl.LazyFrame, parquet_path:Path, plant_name: str, machine_name:str):
 
     lf = lf.with_columns([
         pl.col("Datetime").dt.year().alias("year"),
@@ -108,7 +108,7 @@ def write_parquet_file(lf: pl.LazyFrame, plant_name: str, machine_name:str):
 
     ds.write_dataset(
         data=tbl,
-        base_dir = "data/parquet",
+        base_dir = parquet_path,
         format="parquet",
         partitioning=["plant_name", "machine_no", "year", "month"],
         existing_data_behavior="overwrite_or_ignore",
