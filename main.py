@@ -67,7 +67,9 @@ def read_pi_file(file_path: Path, encoding="utf-8"):
     return lf, header_lf
 
 
-def register_header_to_duckdb(header_lf: pl.LazyFrame, db_path: str = "master.duckdb", table_name: str = "param_master"):
+def register_header_to_duckdb(header_lf: pl.LazyFrame, db_path: Path, table_name: str = "param_master"):
+    db_path.mkdir(parents=True, exist_ok=True)
+    
     # DuckDBに接続
     con = duckdb.connect(db_path)
     # DataFrame化
