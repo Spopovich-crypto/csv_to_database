@@ -93,13 +93,13 @@ def register_header_to_duckdb(header_lf: pl.LazyFrame, db_path: Path, table_name
     con.close()
 
 
-def write_parquet_file(lf: pl.LazyFrame, parquet_path:Path, plant_name: str, machine_name:str):
+def write_parquet_file(lf: pl.LazyFrame, parquet_path:Path, plant_name: str, machine_no:str):
 
     lf = lf.with_columns([
         pl.col("Datetime").dt.year().alias("year"),
         pl.col("Datetime").dt.month().alias("month"),
         pl.lit(plant_name).alias("plant_name"),
-        pl.lit(machine_name).alias("machine_name")
+        pl.lit(machine_no).alias("machine_no")
     ])
 
     df = lf.collect()
@@ -114,4 +114,4 @@ def write_parquet_file(lf: pl.LazyFrame, parquet_path:Path, plant_name: str, mac
         existing_data_behavior="overwrite_or_ignore",
         create_dir=True,
     )
-    print(f"write {plant_name}/{machine_name} to parquet")
+    print(f"write {plant_name}/{machine_no} to parquet")
