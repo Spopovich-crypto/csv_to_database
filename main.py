@@ -25,9 +25,9 @@ def read_pi_file(file_path: Path, encoding="utf-8") -> list[dict]:
     import polars as pl
 
     with open(file_path, encoding=encoding) as f:
-        lines = [next(f) for _ in range(3)]
+        header = [next(f) for _ in range(3)]
 
-        param_names = lines[1].strip().split(",")
+        param_names = header[0].strip().split(",")
         param_names[0] = "Datetime"
 
         lf = pl.scan_csv(
@@ -49,8 +49,8 @@ def read_pi_file(file_path: Path, encoding="utf-8") -> list[dict]:
                 pl.col("Datetime").dt.month().alias("month")
             ]
         )
-        
-    return lf
+
+    return lf, header
 
 
 def main():
